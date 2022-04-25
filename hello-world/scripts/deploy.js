@@ -12,5 +12,3 @@ async function main() {
      console.error(error);
      process.exit(1);
    });
-
-//    0x11AacaFde38E182A8879c2D4da99c6245584620D
