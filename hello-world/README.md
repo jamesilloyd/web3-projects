@@ -1,1 +1,1 @@
-#First Smart Contract using the web3.university tutorial
+First Smart Contract using the web3.university tutorial
