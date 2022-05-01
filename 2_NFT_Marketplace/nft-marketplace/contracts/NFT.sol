@@ -20,7 +20,7 @@ contract NFT is ERC721URIStorage {
     /* Mints a token and lists it in the marketplace */
     function createToken(string memory tokenURI) public payable returns (uint) {
       _tokenIds.increment();
-      uint256 newTokenId = _tokenIds.current();
+      uint newTokenId = _tokenIds.current();
 
       _mint(msg.sender, newTokenId);
       _setTokenURI(newTokenId, tokenURI);

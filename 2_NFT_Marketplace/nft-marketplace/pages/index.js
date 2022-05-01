@@ -18,7 +18,8 @@ export default function Home() {
   }, [])
 
   async function loadNFTs() {
-    const provider = new ethers.providers.JsonRpcProvider()
+    const provider = new ethers.providers.JsonRpcProvider("https://polygon-mumbai.g.alchemy.com/v2/jAJjRUS-vJTfDm-wl7ND-P1R4UEoGBiG")
+    // const provider = new ethers.providers.JsonRpcProvider("https://rpc-mumbai.matic.today")
     const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider)
     const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, provider)
     const data = await marketContract.fetchMarketItems()
@@ -38,7 +39,6 @@ export default function Home() {
         description: meta.data.description
       }
       return item
-
     }
     ))
 
@@ -48,22 +48,27 @@ export default function Home() {
 
   async function buyNFT(nft) {
 
+    console.log('buyNFT called')
+
     //Connect the user
     const web3Modal = new Web3Modal()
-    await connection - await web3Modal.connect()
+    const connection = await web3Modal.connect()
     const provider = new ethers.providers.Web3Provider(connection)
+
 
     //We are writing transaction so we need users address and for them to sign the transaction
     const signer = provider.getSigner()
     const contract = new ethers.Contract(nftmarketaddress, Market.abi, signer)
     const price = ethers.utils.parseUnits(nft.price.toString(), 'ether')
+    console.log('tokenid ',nft.tokenId)
+    console.log('itemid ',nft.itemId)
+    //TODO: somewhere along the line we are losing the itemID (or it isn't added in the first place)
     const transaction = await contract.createMarketSale(nftaddress, nft.tokenId, {
       value: price
     })
     await transaction.wait()
     loadNFTs()
   }
-
 
   if (loadingState === 'loaded' && !nfts.length) return (
     <h1 className="px-20 py-10 text-3xl">No items in marketplace</h1>
@@ -87,23 +92,15 @@ export default function Home() {
                   </div>
                 </div>
                 <div className='p-4 bg-black'>
-                  <p className="text-2xl mb-4 font-bold text-white">{nft.price} Matid</p>
+                  <p className="text-2xl mb-4 font-bold text-white">{nft.price} Matic</p>
                   <button className="w-full bg-pink-500 text-white font-bold py-2 px-12 
                   rounded" onClick={() => buyNFT(nft)}>Buy</button>
-
                 </div>
-
               </div>
-
             )
-
             )
           }
-
-
         </div>
-
-
       </div>
     </div>
   )
